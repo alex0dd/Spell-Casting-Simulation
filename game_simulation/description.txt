@@ -1,0 +1,6 @@
+1)player starts cast: CastStartEvent triggered (need to update status, like casting = True)
+2)player can't do anything when casting
+3)once cast is finished: CastEndEvent triggered (need to update status, casting=False and apply damage if applicable)
+4)if failed to cast, then trigger CastEndEvent and do same update as in 3)
+
+when a spell is casted, we dispatch a cast end event in a certain delta time, so it'll be triggered again after some time steps
