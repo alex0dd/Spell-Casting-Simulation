@@ -9,6 +9,9 @@ class Visualizer:
     def visualize_ability_cast_ended(self, time, source, target, ability, success):
         pass
 
+    def visualize_everyone_restore_health_and_resources(self, time, players):
+        pass
+
 
 class TextualVisualizer(Visualizer):
 
@@ -29,3 +32,6 @@ class TextualVisualizer(Visualizer):
             ))
         else:
             print("[Time: {}] {} was not able to cast {} on {}.".format(time, source.name, ability.name, target.name))
+
+    def visualize_everyone_restore_health_and_resources(self, time, players):
+        pass
