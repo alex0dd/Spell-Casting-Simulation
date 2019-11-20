@@ -40,3 +40,13 @@ class AbilityCastEnded(Event):
             params=params, 
             event_finished_callback=event_finished_callback
         )
+
+class EveryoneRestoreHealthAndResources(Event):
+
+    def __init__(self, sender, params=None, event_finished_callback=None):
+        super(EveryoneRestoreHealthAndResources, self).__init__(
+            "EveryoneRestoreHealthAndResources",
+            sender, 
+            params=params, 
+            event_finished_callback=event_finished_callback
+        )

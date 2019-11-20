@@ -25,10 +25,11 @@ game_simulation = GameSimulation(game_model, TextualVisualizer())
 # manually dispatch some events
 import game_simulation.events as events
 # dispatch initial event that starts health and resources restoration for everyone
-game_simulation.event_queue.dispatch_event(events.Event("EveryoneRestoreHealthAndResources", game_model), 0)
+game_simulation.event_queue.dispatch_event(events.EveryoneRestoreHealthAndResources(game_model), 0)
 game_simulation.event_queue.dispatch_event(events.AbilityCastStarted(player_1, {"ability": frost_bolt_spell, "target": boss_player}), 2)
 game_simulation.event_queue.dispatch_event(events.AbilityCastStarted(boss_player, {"ability": melee_attack_ability, "target": player_1}), 2)
 game_simulation.event_queue.dispatch_event(events.AbilityCastStarted(player_1, {"ability": frost_bolt_spell, "target": boss_player}), 4)
+
 
 steps = 1000
 t = 0
@@ -37,7 +38,4 @@ while t < steps:
     t = t + 1
 
 print("{} is {}".format(player_1.name, "alive with {} hp".format(player_1.health) if player_1.is_alive() else "dead" ))
-print("{} is {}".format(boss_player.name, "alive" if boss_player.is_alive() else "dead" ))
-
-#print("{} is {}".format(player_1.name, "alive with {} hp".format(player_1.health) if player_1.is_alive() else "dead" ))
-#print("{} is {}".format(boss_player.name, "alive" if boss_player.is_alive() else "dead" ))
+print("{} is {}".format(boss_player.name, "alive with {} hp".format(boss_player.health) if boss_player.is_alive() else "dead" ))
