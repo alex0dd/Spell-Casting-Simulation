@@ -70,6 +70,8 @@ class Player:
             elif restoring_ability:
                 # restoring ability
                 target.apply_restore(ability.restore)
+            # reset casting state
+            self.is_casting = False
             # able to cast
             return True
         else:
