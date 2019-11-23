@@ -49,21 +49,20 @@ class GameSimulation:
             # TODO: remove the event classification completly from this method
             # apply individual events
             if isinstance(event, events.AbilityCastStarted):
-                event_handlers.handle_ability_cast_started(self, sender, params)
-                new_params = {}
+                out_params = event_handlers.handle_ability_cast_started(self, sender, params)
+                new_params = {**out_params}
                 new_params["current_time"] = self.current_time
                 new_params["sender"] = sender
-                new_params["target"] = params["target"]
-                new_params["ability"] = params["ability"]
                 self.visualization.visualize_ability_cast_started(new_params)
             elif isinstance(event, events.AbilityCastEnded):
-                new_params = event_handlers.handle_ability_cast_ended(self, sender, params)
+                out_params = event_handlers.handle_ability_cast_ended(self, sender, params)
+                new_params = {**out_params}
                 new_params["current_time"] = self.current_time
                 new_params["sender"] = sender
                 self.visualization.visualize_ability_cast_ended(new_params)
             elif isinstance(event, events.EveryoneRestoreHealthAndResources):
-                event_handlers.handle_everyone_restore_health_and_resources(self, sender, params)
-                new_params = {}
+                out_params = event_handlers.handle_everyone_restore_health_and_resources(self, sender, params)
+                new_params = {**out_params}
                 new_params["current_time"] = self.current_time
                 new_params["sender"] = sender
                 self.visualization.visualize_everyone_restore_health_and_resources(new_params)

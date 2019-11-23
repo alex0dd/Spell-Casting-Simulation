@@ -19,6 +19,8 @@ def handle_ability_cast_started(simulation, sender, params):
     # dispatch end of cast event
     event_to_dispatch = (events.AbilityCastEnded(sender, params=new_params), arrival_time)
     simulation.event_queue.dispatch_event(*event_to_dispatch)
+    # return output parameters
+    return new_params
 
 def handle_ability_cast_ended(simulation, sender, params):
     success = params["success"]
@@ -34,7 +36,7 @@ def handle_ability_cast_ended(simulation, sender, params):
     new_params["target_health_after"] = target.health
     new_params["target_mana_after"] = target.mana
     new_params["success"] = success
-
+    # return output parameters
     return new_params
 
 def handle_everyone_restore_health_and_resources(simulation, sender, params):
@@ -42,3 +44,5 @@ def handle_everyone_restore_health_and_resources(simulation, sender, params):
     sender.health_and_resources_restore()
     # send a new event on the next time step
     simulation.event_queue.dispatch_event(events.EveryoneRestoreHealthAndResources(simulation.game_model), simulation.current_time + 1)
+    # return output parameters
+    return {}
