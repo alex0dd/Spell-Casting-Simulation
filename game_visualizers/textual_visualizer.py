@@ -1,22 +1,18 @@
-class Visualizer:
-
-    def __init__(self):
-        pass
-
-    def visualize_ability_cast_started(self, params):
-        pass
-
-    def visualize_ability_cast_ended(self, params):
-        pass
-
-    def visualize_everyone_restore_health_and_resources(self, params):
-        pass
-
+from simulation.visualization import Visualizer
+import game_events.game_events as events
 
 class TextualVisualizer(Visualizer):
 
     def __init__(self):
         pass
+
+    def visualize(self, event, params):
+        if isinstance(event, events.AbilityCastStarted):
+            self.visualize_ability_cast_started(params)
+        elif isinstance(event, events.AbilityCastEnded):
+            self.visualize_ability_cast_ended(params)
+        elif isinstance(event, events.EveryoneRestoreHealthAndResources):
+            self.visualize_everyone_restore_health_and_resources(params)
 
     def visualize_ability_cast_started(self, params):
         time = params["current_time"]

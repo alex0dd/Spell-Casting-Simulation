@@ -1,11 +1,15 @@
 from .event_queue import EventQueue
 
-import game_simulation.game_events as events
+class DiscreteEventsSimulation:
 
-class GameSimulation:
+    def __init__(self, model, visualizers=None):
+        """
+        Discrete events simulation with a time step counter
 
-    def __init__(self, game_model, visualization=None):
-        self.game_model = game_model
+        model: world model of the simulation
+        visualizers: list of visualizers
+        """
+        self.model = model
         # current simulation time
         self.current_time = 0
         # queue for incoming events
@@ -15,7 +19,7 @@ class GameSimulation:
         self.active_event = None
         self.active_event_time = None
         # visualizer instance
-        self.visualization = visualization
+        self.visualizers = visualizers
     
     def step(self):
         """
@@ -46,18 +50,14 @@ class GameSimulation:
             sender = event.sender
             params = event.params
 
+            # handle event
             out_params = event.handle(self, sender, params)
             new_params = {**out_params}
             new_params["current_time"] = self.current_time
             new_params["sender"] = sender
-            # TODO: remove the event classification completly from this method
-            # apply individual events
-            if isinstance(event, events.AbilityCastStarted):
-                self.visualization.visualize_ability_cast_started(new_params)
-            elif isinstance(event, events.AbilityCastEnded):
-                self.visualization.visualize_ability_cast_ended(new_params)
-            elif isinstance(event, events.EveryoneRestoreHealthAndResources):
-                self.visualization.visualize_everyone_restore_health_and_resources(new_params)
+            # visualize the event via the passed visualizers
+            for visualizer in self.visualizers:
+                visualizer.visualize(event, new_params)
             # look for the next event
             next_event = self.event_queue.peek_event()
             # if it has the same timestamp as current time

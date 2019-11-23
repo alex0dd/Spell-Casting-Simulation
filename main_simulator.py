@@ -1,7 +1,7 @@
 from game_model import player, ability
 from game_model.model import GameModel
-from game_simulation.simulation import GameSimulation
-from game_simulation.visualization import TextualVisualizer
+from simulation.simulation import DiscreteEventsSimulation
+from game_visualizers.textual_visualizer import TextualVisualizer
 import random as random
 
 import os
@@ -20,10 +20,10 @@ enemies_list = [boss_player]
 
 game_model = GameModel(players_list+enemies_list)
 
-game_simulation = GameSimulation(game_model, TextualVisualizer())
+game_simulation = DiscreteEventsSimulation(game_model, [TextualVisualizer()])
 
 # manually dispatch some events
-import game_simulation.game_events as events
+import game_events.game_events as events
 # dispatch initial event that starts health and resources restoration for everyone
 game_simulation.event_queue.dispatch_event(events.EveryoneRestoreHealthAndResources(game_model), 0)
 game_simulation.event_queue.dispatch_event(events.AbilityCastStarted(player_1, {"ability": frost_bolt_spell, "target": boss_player}), 2)

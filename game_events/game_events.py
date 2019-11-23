@@ -1,4 +1,4 @@
-from game_simulation.events import Event
+from simulation.events import Event
 
 class AbilityCastStarted(Event):
 
@@ -70,6 +70,6 @@ class EveryoneRestoreHealthAndResources(Event):
         # restore everyone's health (done by GameModel)
         sender.health_and_resources_restore()
         # send a new event on the next time step
-        simulation.event_queue.dispatch_event(EveryoneRestoreHealthAndResources(simulation.game_model), simulation.current_time + 1)
+        simulation.event_queue.dispatch_event(EveryoneRestoreHealthAndResources(simulation.model), simulation.current_time + 1)
         # return output parameters
         return {}
