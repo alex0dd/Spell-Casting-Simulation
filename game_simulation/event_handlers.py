@@ -33,8 +33,9 @@ def handle_ability_cast_ended(simulation, sender, params):
     new_params = params
     new_params["target_health_after"] = target.health
     new_params["target_mana_after"] = target.mana
+    new_params["success"] = success
 
-    return success, new_params
+    return new_params
 
 def handle_everyone_restore_health_and_resources(simulation, sender, params):
     # restore everyone's health (done by GameModel)

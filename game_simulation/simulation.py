@@ -46,31 +46,27 @@ class GameSimulation:
             # get the sender and params
             sender = event.sender
             params = event.params
+            # TODO: remove the event classification completly from this method
             # apply individual events
             if isinstance(event, events.AbilityCastStarted):
                 event_handlers.handle_ability_cast_started(self, sender, params)
-                self.visualization.visualize_ability_cast_started(
-                    self.current_time, 
-                    sender, 
-                    params["target"], 
-                    params["ability"]
-                )
+                new_params = {}
+                new_params["current_time"] = self.current_time
+                new_params["sender"] = sender
+                new_params["target"] = params["target"]
+                new_params["ability"] = params["ability"]
+                self.visualization.visualize_ability_cast_started(new_params)
             elif isinstance(event, events.AbilityCastEnded):
-                success, new_params = event_handlers.handle_ability_cast_ended(self, sender, params)
-                self.visualization.visualize_ability_cast_ended(self.current_time, 
-                    sender, 
-                    new_params["target"], 
-                    new_params["ability"], 
-                    new_params["target_health_before"], 
-                    new_params["target_health_after"], 
-                    success
-                )
+                new_params = event_handlers.handle_ability_cast_ended(self, sender, params)
+                new_params["current_time"] = self.current_time
+                new_params["sender"] = sender
+                self.visualization.visualize_ability_cast_ended(new_params)
             elif isinstance(event, events.EveryoneRestoreHealthAndResources):
                 event_handlers.handle_everyone_restore_health_and_resources(self, sender, params)
-                self.visualization.visualize_everyone_restore_health_and_resources(
-                    self.current_time, 
-                    self.game_model.players
-                )
+                new_params = {}
+                new_params["current_time"] = self.current_time
+                new_params["sender"] = sender
+                self.visualization.visualize_everyone_restore_health_and_resources(new_params)
             # look for the next event
             next_event = self.event_queue.peek_event()
             # if it has the same timestamp as current time
