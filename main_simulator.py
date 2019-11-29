@@ -1,7 +1,7 @@
 from game_model import player, ability
 from game_model.model import GameModel
 import game_events.game_events as events
-from game_events.game_event_emitters import AbilityCastEventEmitter
+from game_events.game_event_emitters import AbilityCastEventEmitter, RestoreEveryoneEventEmitter
 from simulation.simulation import DiscreteEventsSimulation
 from game_visualizers.textual_visualizer import TextualVisualizer
 import random as random
@@ -21,23 +21,24 @@ enemies_list = [boss_player]
 
 game_model = GameModel(players_list+enemies_list)
 
+everyone_restore_emitter = EveryoneRestoreEventEmitter(game_model)
 player_1_cast_emitter = AbilityCastEventEmitter(player_1)
 boss_cast_emitter = AbilityCastEventEmitter(boss_player)
 
 game_simulation = DiscreteEventsSimulation(
     game_model, 
     event_emitters=[
-        player_1_cast_emitter, boss_cast_emitter
+        everyone_restore_emitter, player_1_cast_emitter, boss_cast_emitter
     ], 
     visualizers=[TextualVisualizer()]
 )
 
 # manually dispatch some events
 # dispatch initial event that starts health and resources restoration for everyone
-game_simulation.event_queue.dispatch_event(events.EveryoneRestoreHealthAndResources(game_model), 0)
-game_simulation.event_queue.dispatch_event(events.AbilityCastStarted(player_1, {"ability": frost_bolt_spell, "target": boss_player}), 2)
-game_simulation.event_queue.dispatch_event(events.AbilityCastStarted(boss_player, {"ability": melee_attack_ability, "target": player_1}), 2)
-game_simulation.event_queue.dispatch_event(events.AbilityCastStarted(player_1, {"ability": frost_bolt_spell, "target": boss_player}), 4)
+#game_simulation.event_queue.dispatch_event(events.EveryoneRestoreHealthAndResources(game_model), 0)
+#game_simulation.event_queue.dispatch_event(events.AbilityCastStarted(player_1, {"ability": frost_bolt_spell, "target": boss_player}), 2)
+#game_simulation.event_queue.dispatch_event(events.AbilityCastStarted(boss_player, {"ability": melee_attack_ability, "target": player_1}), 2)
+#game_simulation.event_queue.dispatch_event(events.AbilityCastStarted(player_1, {"ability": frost_bolt_spell, "target": boss_player}), 4)
 
 
 steps = 30

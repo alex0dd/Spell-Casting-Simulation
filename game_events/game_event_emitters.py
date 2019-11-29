@@ -1,4 +1,4 @@
-from game_events.game_events import AbilityCastStarted
+import game_events.game_events as events
 from simulation.events import EventEmitter
 import random
 
@@ -14,6 +14,14 @@ class AbilityCastEventEmitter(EventEmitter):
         if len(targets) > 0 and len(self.emitter.abilities) > 0:
             ability = random.choice(self.emitter.abilities)
             target = random.choice(targets)
-            emitted_event = AbilityCastStarted(self.emitter, {"ability": ability, "target": target})
+            emitted_event = events.AbilityCastStarted(self.emitter, {"ability": ability, "target": target})
         return emitted_event
 
+class EveryoneRestoreEventEmitter(EventEmitter):
+
+    def __init__(self, emitter):
+        super(EveryoneRestoreEventEmitter, self).__init__(emitter)
+
+    def emit(self, model):
+        return events.EveryoneRestoreHealthAndResources(self.emitter)
+        

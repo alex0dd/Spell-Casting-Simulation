@@ -8,7 +8,7 @@ import os
 from game_model import player, ability
 from game_model.model import GameModel
 import game_events.game_events as events
-from game_events.game_event_emitters import AbilityCastEventEmitter
+from game_events.game_event_emitters import AbilityCastEventEmitter, EveryoneRestoreEventEmitter
 from simulation.simulation import DiscreteEventsSimulation
 from game_visualizers.textual_visualizer import TextualVisualizer
 import random as random
@@ -28,13 +28,14 @@ enemies_list = [boss_player]
 
 game_model = GameModel(players_list+enemies_list)
 
+everyone_restore_emitter = EveryoneRestoreEventEmitter(game_model)
 player_1_cast_emitter = AbilityCastEventEmitter(player_1)
 boss_cast_emitter = AbilityCastEventEmitter(boss_player)
 
 game_simulation = DiscreteEventsSimulation(
     game_model, 
     event_emitters=[
-        player_1_cast_emitter, boss_cast_emitter
+        everyone_restore_emitter, player_1_cast_emitter, boss_cast_emitter
     ], 
     visualizers=[TextualVisualizer()]
 )

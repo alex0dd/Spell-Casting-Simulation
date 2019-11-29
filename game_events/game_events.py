@@ -69,7 +69,5 @@ class EveryoneRestoreHealthAndResources(Event):
     def handle(self, simulation, sender, params):
         # restore everyone's health (done by GameModel)
         sender.health_and_resources_restore()
-        # send a new event on the next time step
-        simulation.event_queue.dispatch_event(EveryoneRestoreHealthAndResources(simulation.model), simulation.current_time + 1)
         # return output parameters
         return {}
