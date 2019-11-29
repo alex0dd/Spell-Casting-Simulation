@@ -107,7 +107,10 @@ class SimulationWindow(QMainWindow):
         for player_heal_button, player in zip(
             self.player_heal_buttons, self.model.players
         ):
-            player_heal_button.setText("{}\n{}/{}".format(player.name, player.health, player.max_health))
+            if player.health > 0:
+                player_heal_button.setText("{}\n{}/{}".format(player.name, player.health, player.max_health))
+            else:
+                player_heal_button.setText("{}\nDead".format(player.name))
 
     def simulator_tick(self):
         self.simulation_time_label.setText(
