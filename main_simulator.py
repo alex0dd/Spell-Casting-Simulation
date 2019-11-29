@@ -1,10 +1,11 @@
 from game_model import player, ability
 from game_model.model import GameModel
+import game_events.game_events as events
+from game_events.game_event_emitters import AbilityCastEventEmitter
 from simulation.simulation import DiscreteEventsSimulation
 from game_visualizers.textual_visualizer import TextualVisualizer
 import random as random
 
-import os
 
 frost_bolt_spell = ability.DamagingAbility(100, 200, cast_time=5, name="Frost Bolt")
 melee_attack_ability = ability.DamagingAbility(50, 1, cast_time=1, name="Melee Attack")
@@ -20,10 +21,18 @@ enemies_list = [boss_player]
 
 game_model = GameModel(players_list+enemies_list)
 
-game_simulation = DiscreteEventsSimulation(game_model, [TextualVisualizer()])
+player_1_cast_emitter = AbilityCastEventEmitter(player_1)
+boss_cast_emitter = AbilityCastEventEmitter(boss_player)
+
+game_simulation = DiscreteEventsSimulation(
+    game_model, 
+    event_emitters=[
+        player_1_cast_emitter, boss_cast_emitter
+    ], 
+    visualizers=[TextualVisualizer()]
+)
 
 # manually dispatch some events
-import game_events.game_events as events
 # dispatch initial event that starts health and resources restoration for everyone
 game_simulation.event_queue.dispatch_event(events.EveryoneRestoreHealthAndResources(game_model), 0)
 game_simulation.event_queue.dispatch_event(events.AbilityCastStarted(player_1, {"ability": frost_bolt_spell, "target": boss_player}), 2)
@@ -31,7 +40,7 @@ game_simulation.event_queue.dispatch_event(events.AbilityCastStarted(boss_player
 game_simulation.event_queue.dispatch_event(events.AbilityCastStarted(player_1, {"ability": frost_bolt_spell, "target": boss_player}), 4)
 
 
-steps = 1000
+steps = 30
 t = 0
 while t < steps:
     game_simulation.step()

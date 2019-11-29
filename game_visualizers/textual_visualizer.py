@@ -30,13 +30,22 @@ class TextualVisualizer(Visualizer):
         health_after = params["target_health_after"]
         success = params["success"]
         if success:
-            print("[Time: {}] {} has hit {} for {} damage, {} left.".format(
-                time,
-                source.name, 
-                target.name, 
-                health_before - health_after,
-                health_after
-            ))
+            if health_after > 0:
+                print("[Time: {}] {} has hit {} for {} damage, {} left.".format(
+                    time,
+                    source.name, 
+                    target.name, 
+                    health_before - health_after,
+                    health_after
+                ))
+            else:
+                print("[Time: {}] {} has hit {} for {} damage, {} has died.".format(
+                    time,
+                    source.name, 
+                    target.name, 
+                    health_before - health_after,
+                    target.name
+                ))
         else:
             print("[Time: {}] {} was not able to cast {} on {}.".format(time, source.name, ability.name, target.name))
 

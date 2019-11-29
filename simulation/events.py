@@ -22,3 +22,15 @@ class Event:
         Defined by a function: (simulation_instance, sender, target)->resulting_parameters
         """
         pass
+
+class EventEmitter:
+
+    def __init__(self, emitter):
+        """
+        Emit events with some policy (for implementing automatic event generation).
+        emitter: entity that will be the sender of the events emitted by this emitter
+        """
+        self.emitter = emitter
+    
+    def emit(self, model):
+        pass

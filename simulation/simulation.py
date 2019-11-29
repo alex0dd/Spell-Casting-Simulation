@@ -2,11 +2,12 @@ from .event_queue import EventQueue
 
 class DiscreteEventsSimulation:
 
-    def __init__(self, model, visualizers=None):
+    def __init__(self, model, event_emitters=[], visualizers=[]):
         """
         Discrete events simulation with a time step counter
 
         model: world model of the simulation
+        event_emitters: simulation entities that will emit events with some policy
         visualizers: list of visualizers
         """
         self.model = model
@@ -18,6 +19,7 @@ class DiscreteEventsSimulation:
         # (as we can't check time via peek, due to EventQueue implementation)
         self.active_event = None
         self.active_event_time = None
+        self.event_emitters = event_emitters
         # visualizer instance
         self.visualizers = visualizers
     
@@ -28,12 +30,20 @@ class DiscreteEventsSimulation:
 
         """
         Working principle:
-            1) Extract an event from the event queue (ordered by timestamp)
-            2) Interpret the event and execute the relative actions
-            3) If there are more events with current simulation time timestamp, 
+            1) For each event emitter (source) emit an event
+            2) Extract an event from the event queue (ordered by timestamp)
+            3) Interpret the event and execute the relative actions
+            4) If there are more events with current simulation time timestamp, 
                then go to 1), otherwise go to 4)
-            4) Update simulation timer
+            5) Update simulation timer
         """
+
+        # make event emitters emit their events
+        for emitter in self.event_emitters:
+            emitted_event = emitter.emit(self.model)
+            # if its a valid emittable event (not None), then dispatch it
+            if emitted_event:
+                self.event_queue.dispatch_event(emitted_event, self.current_time)
 
         # if there are no active events
         if self.active_event == None:

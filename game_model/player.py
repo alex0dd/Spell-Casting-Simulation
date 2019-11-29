@@ -40,11 +40,12 @@ class Player:
         self.apply_heal(health)
         self.apply_restore(mana)
 
-    def can_cast_ability(self, ability):
-        # TODO: add target check (so include a target parameter)
+    def can_cast_ability(self, ability, target):
         can_be_casted = True
         cast_conditions = [
-            not self.is_casting, 
+            not self.is_casting,
+            self.health > 0,
+            target.health > 0,
             ability.cost < self.mana, 
             ability in self.abilities
         ]
@@ -61,7 +62,7 @@ class Player:
         healing_ability = isinstance(ability, HealingAbility)
         restoring_ability = isinstance(ability, RestoringAbility)
 
-        if self.can_cast_ability(ability) or conditions_checked:
+        if self.can_cast_ability(ability, target) or conditions_checked:
             if damaging_ability:
                 target.apply_damage(ability.damage)
             elif healing_ability:

@@ -15,7 +15,7 @@ class AbilityCastStarted(Event):
         target = params["target"]
 
         new_params = {"ability": ability, "target": target, "target_health_before": target.health, "target_mana_before": target.mana}
-        if sender.can_cast_ability(ability):
+        if sender.can_cast_ability(ability, target):
             # dispatch an end event with success
             sender.is_casting = True        
             new_params["success"] = True
@@ -48,6 +48,10 @@ class AbilityCastEnded(Event):
         if success:
             # apply ability effect
             sender.cast_ability(ability, target)
+            # check if player is dead
+            if target.health <= 0:
+                # register player's death
+                simulation.model.register_player_dead(target)
         
         # TODO: handle this better (needed for visualization)
         new_params = params
