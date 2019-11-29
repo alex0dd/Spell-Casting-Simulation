@@ -37,8 +37,9 @@ class Player:
         self.mana = min(self.mana + restore, self.max_mana)
 
     def restore_health_and_mana(self, health, mana):
-        self.apply_heal(health)
-        self.apply_restore(mana)
+        if self.health > 0:
+            self.apply_heal(health)
+            self.apply_restore(mana)
 
     def can_cast_ability(self, ability, target):
         can_be_casted = True
