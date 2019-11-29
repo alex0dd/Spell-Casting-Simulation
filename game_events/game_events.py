@@ -48,10 +48,6 @@ class AbilityCastEnded(Event):
         if success:
             # apply ability effect
             sender.cast_ability(ability, target)
-            # check if player is dead
-            if target.health <= 0:
-                # register player's death
-                simulation.model.register_player_dead(target)
         
         # TODO: handle this better (needed for visualization)
         new_params = params
