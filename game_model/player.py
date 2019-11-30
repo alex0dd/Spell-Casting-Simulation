@@ -3,7 +3,7 @@ from .ability import Ability, HealingAbility, DamagingAbility, RestoringAbility
 
 class Player:
 
-    def __init__(self, max_health, max_mana, health_per_unit_time=0, mana_per_unit_time=0, abilities = [], name="", game_class=""):
+    def __init__(self, max_health, max_mana, health_per_unit_time=0, mana_per_unit_time=0, abilities = [], name="", game_class="", is_god=False):
         self.max_health = max_health
         self.max_mana = max_mana
         self.health = max_health
@@ -14,6 +14,8 @@ class Player:
         self.name = name
         self.game_class = game_class
         self.is_casting = False
+        # god player, that has privileges in the game
+        self.is_god = is_god
 
     def is_casting(self):
         return self.is_casting
@@ -53,7 +55,8 @@ class Player:
         for cond in cast_conditions:
             # chain of and operators because we might have multiple conditions
             can_be_casted = can_be_casted and cond
-        return can_be_casted
+        # a god player can always cast ability
+        return can_be_casted or self.is_god
 
     def cast_ability(self, ability, target, conditions_checked=True):
         """

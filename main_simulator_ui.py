@@ -13,7 +13,7 @@ from simulation.simulation import DiscreteEventsSimulation
 from game_visualizers.textual_visualizer import TextualVisualizer
 import random as random
 
-
+flash_heal_spell = ability.HealingAbility(80, 50, cast_time=1, name="Flash Heal")
 frost_bolt_spell = ability.DamagingAbility(100, 200, cast_time=5, name="Frost Bolt")
 melee_attack_ability = ability.DamagingAbility(50, 1, cast_time=1, name="Melee Attack")
 
@@ -42,10 +42,10 @@ game_simulation = DiscreteEventsSimulation(
 
 # manually dispatch some events
 # dispatch initial event that starts health and resources restoration for everyone
-game_simulation.event_queue.dispatch_event(events.EveryoneRestoreHealthAndResources(game_model), 0)
-game_simulation.event_queue.dispatch_event(events.AbilityCastStarted(player_1, {"ability": frost_bolt_spell, "target": boss_player}), 2)
-game_simulation.event_queue.dispatch_event(events.AbilityCastStarted(boss_player, {"ability": melee_attack_ability, "target": player_1}), 2)
-game_simulation.event_queue.dispatch_event(events.AbilityCastStarted(player_1, {"ability": frost_bolt_spell, "target": boss_player}), 4)
+game_simulation.dispatch_event(events.EveryoneRestoreHealthAndResources(game_model), 0)
+game_simulation.dispatch_event(events.AbilityCastStarted(player_1, {"ability": frost_bolt_spell, "target": boss_player}), 2)
+game_simulation.dispatch_event(events.AbilityCastStarted(boss_player, {"ability": melee_attack_ability, "target": player_1}), 2)
+game_simulation.dispatch_event(events.AbilityCastStarted(player_1, {"ability": frost_bolt_spell, "target": boss_player}), 4)
 
 class SimulationWindow(QMainWindow):
     
@@ -92,6 +92,7 @@ class SimulationWindow(QMainWindow):
         self.player_heal_buttons = []
         for player in self.model.players:
             player_heal_button = QPushButton()
+            player_heal_button.pressed.connect(lambda player=player: self.send_heal(player))
             self.player_heal_buttons.append(player_heal_button)
             layout.addWidget(player_heal_button)
 
@@ -112,6 +113,9 @@ class SimulationWindow(QMainWindow):
                 player_heal_button.setText("{}\n{}/{}".format(player.name, player.health, player.max_health))
             else:
                 player_heal_button.setText("{}\nDead".format(player.name))
+
+    def send_heal(self, player):
+        self.simulation.dispatch_event(events.AbilityCastStarted(self.model.god, {"target": player, "ability": flash_heal_spell}))
 
     def simulator_tick(self):
         self.simulation_time_label.setText(

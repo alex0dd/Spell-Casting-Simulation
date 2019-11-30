@@ -1,7 +1,13 @@
+from game_model.player import Player
+
 class GameModel:
     
     def __init__(self, players):
         self.players = players
+        self.god = Player(10**10, 10**10, health_per_unit_time=10**10, mana_per_unit_time=10**10, name="God", is_god=True)
+
+    def get_god_player(self):
+        return self.god
 
     def add_player(self, player):
         if player not in players:
