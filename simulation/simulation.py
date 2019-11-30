@@ -23,8 +23,13 @@ class DiscreteEventsSimulation:
         # visualizer instance
         self.visualizers = visualizers
 
-    def dispatch_event(self, event, arrival_time):
-        self.event_queue.dispatch_event(event, arrival_time)
+    def dispatch_event(self, event, arrival_time=-1):
+        """
+        Dispatches a given simulation event to arrive at a certain time
+        event: event to dispatch
+        arrival_time: time of arrival of the event. (Default: -1 for instant arrival)
+        """
+        self.event_queue.dispatch_event(event, arrival_time if arrival_time > 0 else self.current_time)
     
     def step(self):
         """
