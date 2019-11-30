@@ -16,10 +16,10 @@ class Event:
     def name(self):
         return self.event_name
 
-    def handle(self, simulation, sender, target):
+    def handle(self, simulation, sender, params):
         """
         Method that will be called when the event will need to be handled.
-        Defined by a function: (simulation_instance, sender, target)->resulting_parameters
+        Defined by a function: (simulation_instance, sender, params)->resulting_parameters
         """
         pass
 

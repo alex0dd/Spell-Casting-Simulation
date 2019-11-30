@@ -1,0 +1,7 @@
+{
+    "abilities": [
+        {"id": 1, "type": "damage", "Name": "Frost Bolt", "Cost": 200, "CastTime": 5, "BaseDamage": 100},
+        {"id": 2, "type": "damage", "Name": "Melee Attack", "Cost": 0, "CastTime": 1, "BaseDamage": 50},
+        {"id": 3, "type": "heal", "Name": "Flash Heal", "Cost": 50, "CastTime": 1, "BaseHeal": 80}
+    ]
+}
