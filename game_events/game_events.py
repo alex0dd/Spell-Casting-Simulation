@@ -27,7 +27,7 @@ class AbilityCastStarted(Event):
         
         # dispatch end of cast event
         event_to_dispatch = (AbilityCastEnded(sender, params=new_params), arrival_time)
-        simulation.event_queue.dispatch_event(*event_to_dispatch)
+        simulation.dispatch_event(*event_to_dispatch)
         # return output parameters
         return new_params    
 

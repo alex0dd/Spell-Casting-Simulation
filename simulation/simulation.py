@@ -22,6 +22,9 @@ class DiscreteEventsSimulation:
         self.event_emitters = event_emitters
         # visualizer instance
         self.visualizers = visualizers
+
+    def dispatch_event(self, event, arrival_time):
+        self.event_queue.dispatch_event(event, arrival_time)
     
     def step(self):
         """
@@ -43,7 +46,7 @@ class DiscreteEventsSimulation:
             emitted_event = emitter.emit(self.model)
             # if its a valid emittable event (not None), then dispatch it
             if emitted_event:
-                self.event_queue.dispatch_event(emitted_event, self.current_time)
+                self.dispatch_event(emitted_event, self.current_time)
 
         # if there are no active events
         if self.active_event == None:
